@@ -1,6 +1,6 @@
 import requests
 import pandas as pd
-
+import os
 
 def cemantix():
 
@@ -22,17 +22,22 @@ def cemantix():
     data = requests.post(url=url, headers=headers, data=body)
     print(data.json())
 
-print("Downloading dictionnary...")
-lex = pd.read_csv("http://www.lexique.org/databases/Lexique383/Lexique383.tsv", sep="\t")
+print("Loading dictionnary ...")
+if os.path.isfile("./dico_fr.csv"):
+    lex = pd.read_csv("./dico_fr.csv")
+else:
+    print("Dictionnary not found, downloading and saving dictionnary...")
+    lex = pd.read_csv("http://www.lexique.org/databases/Lexique383/Lexique383.tsv", sep="\t")
+    lex.to_csv("./dico_fr.csv")
 print("Done.")
 
 #https://chrplr.github.io/openlexicon/datasets-info/
 
 print("Selecting proper words from dictionnary...")
-mots = []
-for mot in lex['lemme']:
-    if not (mot in mots):
-        mots.append(mot)
+# mots = []
+# for mot in lex['lemme']:
+#     if not (mot in mots):
+#         mots.append(mot)
 print("Done.")
 
 
